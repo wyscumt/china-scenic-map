@@ -705,6 +705,40 @@
     pointer-events: none;
   }
 
+  /* 全国模糊检索：地图面板顶部的跨省搜索框 */
+  .global-search { margin: 0 0 12px; }
+  .global-search .search-field input {
+    height: 36px;
+    padding-right: 78px;
+    font-size: 11.5px;
+  }
+  .global-search .search-count { right: 32px; }
+  .global-search .gs-clear {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(141, 126, 103, .14);
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .global-search .gs-clear:hover { background: rgba(168, 117, 24, .18); color: var(--gold-deep); }
+  .gs-tip {
+    margin: 6px 2px 0;
+    color: var(--muted);
+    font-size: 9.5px;
+    line-height: 1.5;
+    letter-spacing: .02em;
+  }
+  .search-picks { margin-top: 4px; }
+
   .filter-row {
     display: flex;
     align-items: center;
@@ -1318,6 +1352,16 @@
         </div>
       </div>
 
+      <div class="global-search">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="6.4"/><path d="m16 16 4.4 4.4"/></svg>
+          <input id="globalSearch" type="search" autocomplete="off" maxlength="40" placeholder="全国检索：如 森林公园 / 古镇 / 温泉" aria-label="全国景区模糊检索">
+          <span class="search-count" id="globalSearchCount"></span>
+          <button class="gs-clear" id="globalSearchClear" type="button" hidden aria-label="清除全国检索">×</button>
+        </div>
+        <p class="gs-tip">跨省模糊匹配景区名称（支持近似词，如“泉水”可命中“趵突泉”），多个关键词用空格分隔；结果按 5A → 4A → 3A 排序，地图同步标出命中省份</p>
+      </div>
+
       <div class="map-stage" id="mapStage">
         <div class="map-chart" id="mapChart" role="img" aria-label="中国省级行政区交互地图"></div>
         <div class="map-loading" id="mapLoading">
@@ -1637,7 +1681,8 @@ var _hmt = _hmt || [];
         { name: '梅力更', level: '4A', intro: '梅力更位于包头，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '腾格里沙漠天鹅湖', level: '4A', intro: '腾格里沙漠天鹅湖位于阿拉善盟，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '额尔古纳湿地', level: '4A', intro: '额尔古纳湿地位于呼伦贝尔，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '室韦', level: '4A', intro: '室韦位于呼伦贝尔，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '室韦', level: '4A', intro: '室韦位于呼伦贝尔，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '大青沟国家级自然保护区', level: '4A', intro: '位于通辽市科尔沁左翼后旗沙地腹地，沟内原始阔叶林与沙漠、草甸、泉水相伴，被誉为“沙漠圣谷”，可漂流观林海。', image: '' }
     ],
     '辽宁': [
         { name: '张氏帅府', level: '4A', intro: '张氏帅府位于沈阳，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -1892,7 +1937,8 @@ var _hmt = _hmt || [];
         { name: '太阳岛雪博会', level: '4A', intro: '太阳岛雪博会位于哈尔滨，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '亚布力滑雪旅游度假区', level: '4A', intro: '亚布力滑雪旅游度假区位于哈尔滨，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '五营国家森林公园', level: '4A', intro: '五营国家森林公园位于伊春，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '镜泊湖火山口地下森林', level: '4A', intro: '镜泊湖火山口地下森林位于牡丹江，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '镜泊湖火山口地下森林', level: '4A', intro: '镜泊湖火山口地下森林位于牡丹江，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '黑龙江凉水国家级自然保护区', level: '4A', intro: '位于伊春市大箐山县带岭，小兴安岭南坡，保存完整的原始红松阔叶混交林，是东北林业大学科研教学基地，宜森林研学避暑。', image: '' }
     ],
     '上海': [
         { name: '中共一大纪念馆', level: '4A', intro: '中共一大纪念馆位于上海，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
@@ -2654,7 +2700,8 @@ var _hmt = _hmt || [];
         { name: '二七纪念塔', level: '4A', intro: '二七纪念塔位于郑州，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
         { name: '大相国寺', level: '4A', intro: '大相国寺位于开封，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
         { name: '包公祠', level: '4A', intro: '包公祠位于开封，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
-        { name: '龙亭公园', level: '4A', intro: '龙亭公园位于开封，是4A级休闲游乐景区，集观光、娱乐、科普于一体。园区设施完善、项目丰富，适合家庭亲子与周末休闲出行，不同年龄段游客都能在这里找到乐趣。', image: '' }
+        { name: '龙亭公园', level: '4A', intro: '龙亭公园位于开封，是4A级休闲游乐景区，集观光、娱乐、科普于一体。园区设施完善、项目丰富，适合家庭亲子与周末休闲出行，不同年龄段游客都能在这里找到乐趣。', image: '' },
+      { name: '河南连康山国家级自然保护区', level: '4A', intro: '位于信阳市新县南部大别山腹地，森林茂密、溪瀑成群，保存着较完整的原始次生林，以生态观光和自然科普见长。', image: '' }
     ],
     '湖北': [
         { name: '襄阳古城', level: '4A', intro: '襄阳古城位于襄阳，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
@@ -2877,7 +2924,8 @@ var _hmt = _hmt || [];
         { name: '靖港古镇', level: '4A', intro: '靖港古镇位于长沙，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
         { name: '沩山密印寺', level: '4A', intro: '沩山密印寺位于长沙，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '千龙湖', level: '4A', intro: '千龙湖位于长沙，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '周洛', level: '4A', intro: '周洛位于长沙，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '周洛', level: '4A', intro: '周洛位于长沙，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '黄桑国家级自然保护区曲幽谷景点', level: '4A', intro: '位于邵阳市绥宁县南部，属八十里大南山北麓，曲幽谷内溪瀑连绵、古木参天，是湘西南森林生态休闲胜地。', image: '' }
     ],
     '广东': [
         { name: '广州塔', level: '4A', intro: '广州塔位于广州，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
@@ -3282,7 +3330,8 @@ var _hmt = _hmt || [];
         { name: '解放碑', level: '4A', intro: '解放碑位于重庆，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '南山一棵树', level: '4A', intro: '南山一棵树位于重庆，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '武隆天生三桥', level: '4A', intro: '武隆天生三桥位于重庆，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '芙蓉洞', level: '4A', intro: '芙蓉洞位于重庆，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '芙蓉洞', level: '4A', intro: '芙蓉洞位于重庆，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '重庆缙云山国家级自然保护区', level: '4A', intro: '位于重庆市北碚区嘉陵江畔，距主城约60公里，以亚热带常绿阔叶林和狮子峰、香炉峰、黛湖等景观著称，素有“川东小峨眉”之称。', image: '' }
     ],
     '四川': [
         { name: '杜甫草堂', level: '4A', intro: '杜甫草堂位于成都，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -3585,7 +3634,8 @@ var _hmt = _hmt || [];
         { name: '米堆冰川', level: '4A', intro: '米堆冰川位于林芝，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '然乌湖', level: '4A', intro: '然乌湖位于昌都，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '来古冰川', level: '4A', intro: '来古冰川位于昌都，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '卡若拉冰川', level: '4A', intro: '卡若拉冰川位于日喀则，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '卡若拉冰川', level: '4A', intro: '卡若拉冰川位于日喀则，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '珠穆朗玛峰国家级自然保护区', level: '4A', intro: '位于日喀则市定日县，以世界最高峰珠穆朗玛峰为核心，含绒布寺、珠峰大本营等景点，是高原生态与登山文化标志性区域。', image: '' }
     ],
     '陕西': [
         { name: '陕西历史博物馆', level: '4A', intro: '陕西历史博物馆位于西安，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
@@ -3603,7 +3653,8 @@ var _hmt = _hmt || [];
         { name: '太平国家森林公园', level: '4A', intro: '太平国家森林公园位于西安，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '朱雀国家森林公园', level: '4A', intro: '朱雀国家森林公园位于西安，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '楼观台', level: '4A', intro: '楼观台位于西安，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
-        { name: '黑河国家森林公园', level: '4A', intro: '黑河国家森林公园位于西安，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '黑河国家森林公园', level: '4A', intro: '黑河国家森林公园位于西安，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '陕西牛背梁国家级自然保护区', level: '4A', intro: '地处商洛市柞水县营盘镇，为秦岭东段长江、黄河分水岭，森林茂密、峡谷幽深，是羚牛等珍稀野生动物的重要栖息地。', image: '' }
     ],
     '甘肃': [
         { name: '玉门关', level: '4A', intro: '玉门关位于酒泉，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -3616,7 +3667,8 @@ var _hmt = _hmt || [];
         { name: '焉支山', level: '4A', intro: '焉支山位于张掖，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '雷台汉墓', level: '4A', intro: '雷台汉墓位于武威，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '武威文庙', level: '4A', intro: '武威文庙位于武威，是4A级人文景区，承载着深厚的历史文化底蕴。景区内古建筑、碑刻与遗迹保存完好，展现了当地独特的历史风貌与民俗风情，是了解地方文化脉络的重要窗口，适合慢游细品。', image: '' },
-        { name: '天梯山石窟', level: '4A', intro: '天梯山石窟位于武威，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '天梯山石窟', level: '4A', intro: '天梯山石窟位于武威，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '甘肃兴隆山国家级自然保护区', level: '4A', intro: '位于兰州市榆中县，距市区约45公里，兴龙山与栖云山双峰对峙，云龙桥、太白泉及成吉思汗文物陈列馆点缀其间，林木葱郁。', image: '' }
     ],
     '青海': [
         { name: '可可西里', level: '4A', intro: '可可西里位于玉树藏族自治州，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -3631,7 +3683,8 @@ var _hmt = _hmt || [];
         { name: '东台吉乃尔湖', level: '4A', intro: '东台吉乃尔湖位于海西蒙古族藏族自治州，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '日月山', level: '4A', intro: '日月山位于西宁，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '倒淌河', level: '4A', intro: '倒淌河位于海南藏族自治州，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '龙羊峡', level: '4A', intro: '龙羊峡位于海南藏族自治州，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '龙羊峡', level: '4A', intro: '龙羊峡位于海南藏族自治州，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '青海孟达国家级自然保护区', level: '4A', intro: '位于海东市循化撒拉族自治县东部黄河谷地，孟达天池海拔约2504米，四周原始森林环抱，被誉为“青藏高原的西双版纳”。', image: '' }
     ],
     '宁夏': [
         { name: '贺兰山岩画', level: '4A', intro: '贺兰山岩画位于银川，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -3642,7 +3695,8 @@ var _hmt = _hmt || [];
         { name: '腾格里沙漠湿地', level: '4A', intro: '腾格里沙漠湿地位于中卫，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '须弥山石窟', level: '4A', intro: '须弥山石窟位于固原，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
         { name: '火石寨', level: '4A', intro: '火石寨位于固原，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
-        { name: '老龙潭', level: '4A', intro: '老龙潭位于固原，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' }
+        { name: '老龙潭', level: '4A', intro: '老龙潭位于固原，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
+      { name: '宁夏哈巴湖国家级自然保护区', level: '4A', intro: '位于吴忠市盐池县中北部，地处毛乌素沙地南缘，沙、湖、林、草交错，秋日小叶杨金黄成片，是观鸟与荒漠生态体验胜地。', image: '' }
     ],
     '新疆': [
         { name: '禾木村', level: '4A', intro: '禾木村位于阿勒泰地区，是4A级自然山水景区，以独特的地质地貌与生态景观著称。景区内山峦、水域、植被层次丰富，四季景色各异，是亲近自然、徒步休闲与摄影采风的好去处。', image: '' },
@@ -4013,7 +4067,8 @@ var _hmt = _hmt || [];
     '云南': [
       { name: '昆明大观公园', level: '4A', intro: '滇池北岸的历史名园，因孙髯翁180字"天下第一长联"闻名，大观楼为清代三层楼阁，登楼可揽滇池与西山睡美人。园内荷浦、假山与柳堤层次丰富，冬季红嘴鸥翔集，是昆明观鸥与赏荷的传统地，也是滇中园林楹联文化的代表。', image: '' },
       { name: '楚雄彝人古镇', level: '4A', intro: '以彝族十月太阳历文化为脉络建设的仿古旅游小镇，布局取"清明上河图"之意，梅葛广场、火塘会、毕摩文化长廊展示彝族史诗与祭祀传统。夜间篝火打跳、左脚舞与火把节庆典是核心体验，是滇中旅游线上民族文化活态展示的代表性街区。', image: '' },
-      { name: '玉溪抚仙湖禄充景区', level: '4A', intro: '抚仙湖西岸历史最久的湖滨渔村景区，背靠笔架山、面临琉璃万顷的深水湖。村内保存清代渔洞"车水捕鱼"的古老捕捞方式，抗浪鱼为特有物种；登笔架山可俯瞰全湖，湖畔榕树沙滩与帆船基地构成高原湖泊休闲度假的经典场景。', image: '' }
+      { name: '玉溪抚仙湖禄充景区', level: '4A', intro: '抚仙湖西岸历史最久的湖滨渔村景区，背靠笔架山、面临琉璃万顷的深水湖。村内保存清代渔洞"车水捕鱼"的古老捕捞方式，抗浪鱼为特有物种；登笔架山可俯瞰全湖，湖畔榕树沙滩与帆船基地构成高原湖泊休闲度假的经典场景。', image: '' },
+      { name: '哀牢山国家级自然保护区杜鹃湖景区', level: '3A', intro: '位于普洱市景东彝族自治县太忠镇，地处哀牢山国家级自然保护区实验区，高海拔人工湖四周杜鹃环绕，原始森林与湖光相映。', image: '' }
     ],
     '北京': [
       { name: '北京大观园', level: '3A', intro: '为1987年版电视剧《红楼梦》拍摄而建的仿古园林，依《红楼梦》原著描述复建怡红院、潇湘馆、蘅芜苑等院落。园内亭台水榭与海棠、翠竹配置考究，常年举办红楼主题文化活动，是文学名著空间化再现与明清园林造景结合的典型案例。', image: '' },
@@ -4025,7 +4080,8 @@ var _hmt = _hmt || [];
       { name: '合肥三国新城遗址公园', level: '4A', intro: '依托三国时期曹魏"合肥新城"夯土城墙遗址建设的遗址公园，是江淮地区保存较好的三国军事城址。园内保留夯土城墙、练兵指挥台与护城河遗迹，陈列馆展示出土兵器与屯田文物，每年春季牡丹盛开，遗址保护与湿地景观相融合。', image: '' },
       { name: '芜湖赭山公园', level: '4A', intro: '芜湖市中心的标志性山岳公园，赭山因土石殷红得名，山巅赭塔始建于北宋，"赭塔晴岚"为古芜湖八景之首。园内中山堂、刘希平墓等近代史迹与翠明园江南造景并存，登顶可览长江与青弋江交汇的城市轮廓，是芜湖的城市绿心。', image: '' },
       { name: '阜阳颍州西湖', level: '4A', intro: '历史上与杭州西湖齐名的古湖泊，欧阳修、苏轼曾在此留下"大千起灭一尘里，未觉杭颍谁雌雄"等名篇。湖区内唐宋碑刻、苏堤烟柳与画舫水街渐次恢复，生态湿地栖息白鹭等水鸟，是皖北重要的文化湖泊与淮河文化记忆载体。', image: '' },
-      { name: '安庆菱湖公园', level: '4A', intro: '安庆老城以菱湖为核心的古典园林群，明清时期即为"宜城"名胜，湖中有岛、岛中有湖。园内严凤英纪念馆纪念黄梅戏一代宗师，邓石如碑馆藏清代书法篆刻；盛夏荷风与黄梅戏票友会交织，是皖江城市文脉与市民生活交融的代表空间。', image: '' }
+      { name: '安庆菱湖公园', level: '4A', intro: '安庆老城以菱湖为核心的古典园林群，明清时期即为"宜城"名胜，湖中有岛、岛中有湖。园内严凤英纪念馆纪念黄梅戏一代宗师，邓石如碑馆藏清代书法篆刻；盛夏荷风与黄梅戏票友会交织，是皖江城市文脉与市民生活交融的代表空间。', image: '' },
+      { name: '铜陵淡水豚国家级自然保护区', level: '3A', intro: '位于铜陵市郊区大通镇和悦洲夹江，是世界上首座半自然条件下易地养护白鱀豚、长江江豚的场所，可近观江豚喂食。', image: '' }
     ],
     '山东': [
       { name: '青岛信号山公园', level: '3A', intro: '青岛市南老城中心的观景名山，海拔98米，山顶三栋红色蘑菇楼是青岛老城地标。登山旋转观景台可360度俯瞰红瓦绿树、碧海蓝天的德式建筑群落与栈桥湾，园内保存德国侵占时期信号台史迹，是"山海城"景观最凝练的取景点。', image: '' },
@@ -4037,7 +4093,8 @@ var _hmt = _hmt || [];
       { name: '长沙烈士公园', level: '3A', intro: '湖南最大的城市综合性公园，为纪念近百年来湘籍革命烈士而建，园心烈士纪念塔高58.7米。年嘉湖水面开阔，湖心岛由拱桥相连，秋季水杉与银杏构成经典的城市秋色；公园承载着清明公祭等集体记忆，也是长沙市民日常游憩的核心场所。', image: '' },
       { name: '株洲神农公园', level: '3A', intro: '以炎帝神农氏文化为主题的城市公园，园内有神农阁、神农大殿与药祖百草园，展示炎帝"尝百草、教民稼穑"的传说谱系。园区临江而建，香樟成林，与湘江风光带相连；每年炎帝文化节在此举办祭祀活动，是株洲城市文化的源头地标。', image: '' },
       { name: '常德诗墙公园', level: '3A', intro: '依托沅江防洪大堤建设的"世界最长诗书画刻艺术墙"，获吉尼斯纪录认证。墙体绵延约3公里，镌刻自先秦至当代诗词1530首，由全国书法家书写并配以石刻画；锁心桥、武陵阁等节点与江滩湿地相连，是防洪工程与公共艺术结合的典范。', image: '' },
-      { name: '永州柳子庙', level: '3A', intro: '为纪念唐代文学家柳宗元而建的清代祠庙，柳宗元谪居永州十年写下《永州八记》。庙内保存苏轼手书《荔子碑》等"三绝碑"，建筑为三进歇山顶湘南风格；庙前愚溪与钴鉧潭遗址串联成柳文化寻访线，是潇湘文脉的重要实物见证。', image: '' }
+      { name: '永州柳子庙', level: '3A', intro: '为纪念唐代文学家柳宗元而建的清代祠庙，柳宗元谪居永州十年写下《永州八记》。庙内保存苏轼手书《荔子碑》等"三绝碑"，建筑为三进歇山顶湘南风格；庙前愚溪与钴鉧潭遗址串联成柳文化寻访线，是潇湘文脉的重要实物见证。', image: '' },
+      { name: '湖南借母溪国家级自然保护区', level: '3A', intro: '位于怀化市沅陵县借母溪乡，地处武陵山脉，沟谷幽深、原始次生林完好，是珙桐等珍稀植物的集中分布地。', image: '' }
     ],
     '福建': [
       { name: '福州于山风景区', level: '3A', intro: '福州"三山"之一，海拔52.2米，因战国时期于越族居此得名。山上有北宋定光塔（白塔）、戚公祠、九仙观等古迹，摩崖石刻自宋至清留存百余段；大士殿曾为辛亥革命福州战役指挥部，是福州城市中轴线上集山岳、宗教与近代史于一体的名胜。', image: '' },
@@ -4794,7 +4851,8 @@ var _hmt = _hmt || [];
       { name: '中卫高庙', level: '3A', intro: '始建于明永乐年间的儒释道三教合一建筑群，又称保安寺，260余间殿宇在仅4000平方米的高台上层层叠起，有"中国古寺庙经典建筑之最"之誉。主体建筑飞桥相接、重楼叠阁，地下彩塑殿劝善惩恶；登楼可览黄河与腾格里沙漠边缘的中卫城景。', image: '' }
     ],
     '新疆': [
-      { name: '库尔勒铁门关', level: '3A', intro: '晋代即设关的丝绸之路中道咽喉，因孔雀河峡谷"两山夹峙、一线中通"得名，为西域三十六国焉耆国的北部门户。峡谷内保存古代关楼遗址与历代摩崖题刻，公主峰流传着焉耆公主与牧羊人的爱情传说；孔雀河碧水与铁色崖壁构成南疆少见的峡谷水关景观。', image: '' }
+      { name: '库尔勒铁门关', level: '3A', intro: '晋代即设关的丝绸之路中道咽喉，因孔雀河峡谷"两山夹峙、一线中通"得名，为西域三十六国焉耆国的北部门户。峡谷内保存古代关楼遗址与历代摩崖题刻，公主峰流传着焉耆公主与牧羊人的爱情传说；孔雀河碧水与铁色崖壁构成南疆少见的峡谷水关景观。', image: '' },
+      { name: '飞鹅保护区“鹅园”观光基地', level: '3A', intro: '位于塔城地区额敏县，以飞鹅保种养殖与田园观光为主，设有鹅园观赏、亲子体验等业态，展现边疆农牧融合的乡村风貌。', image: '' }
     ]
   };
 
@@ -20175,7 +20233,21 @@ var _hmt = _hmt || [];
     '石田古驿景区': '黄石市',
     '矿物晶体奇石文化博览园': '黄石市',
     '花海知音景区': '黄石市',
-    '鄂王城生态文化园': '黄石市'
+    '鄂王城生态文化园': '黄石市',
+    '大青沟国家级自然保护区': '通辽市 · 科尔沁左翼后旗',
+    '宁夏哈巴湖国家级自然保护区': '吴忠市 · 盐池县',
+    '河南连康山国家级自然保护区': '信阳市 · 新县',
+    '黄桑国家级自然保护区曲幽谷景点': '邵阳市 · 绥宁县',
+    '甘肃兴隆山国家级自然保护区': '兰州市 · 榆中县',
+    '珠穆朗玛峰国家级自然保护区': '日喀则市 · 定日县',
+    '重庆缙云山国家级自然保护区': '重庆市 · 北碚区',
+    '陕西牛背梁国家级自然保护区': '商洛市 · 柞水县',
+    '青海孟达国家级自然保护区': '海东市 · 循化撒拉族自治县',
+    '黑龙江凉水国家级自然保护区': '伊春市 · 大箐山县',
+    '哀牢山国家级自然保护区杜鹃湖景区': '普洱市 · 景东彝族自治县',
+    '铜陵淡水豚国家级自然保护区': '铜陵市 · 郊区',
+    '飞鹅保护区“鹅园”观光基地': '塔城地区 · 额敏县',
+    '湖南借母溪国家级自然保护区': '怀化市 · 沅陵县'
 };
 
   // 景区配图：检索自公开网络（360 图片搜索），逐张校验可直链访问；
@@ -20390,7 +20462,38 @@ var _hmt = _hmt || [];
     '阿里山': '阿里山位于台湾嘉义县，并非单指一座山，而是由多座高山组成的山岳风景区，以日出、云海、晚霞、森林与高山铁路五奇闻名。阿里山森林铁路已有百年历史，小火车盘山而上，穿越热带、暖带与温带林相，樱花季与铁道相映成趣；祝山观日平台是迎接台湾第一道曙光的胜地，云海翻腾时尤为震撼；巨木群栈道上千年红桧参天，神木虽倒仍令人敬仰；姊妹潭与受镇宫传说动人。建议春季赏樱或秋冬观云海，安排两天一夜住山上以便看日出，小火车票需提前预订，山区气温低务必带御寒衣物。',
   };
 
-  const SCENIC_PHOTOS = {
+    // 名称不含“保护区”、但本体为国家级自然保护区的既有景区：
+  // 检索“自然保护区”时用官方全称做别名兜底，不改动原景区名。
+  const SCENIC_RESERVES = {
+    '神农架': '神农架国家级自然保护区',
+    '长白山': '长白山国家级自然保护区',
+    '九寨沟风景名胜区': '九寨沟国家级自然保护区',
+    '中华麋鹿园': '江苏大丰麋鹿国家级自然保护区',
+    '黄河口生态旅游区': '山东黄河三角洲国家级自然保护区',
+    '洪泽湖湿地': '江苏泗洪洪泽湖湿地国家级自然保护区',
+    '稻城亚丁': '四川亚丁国家级自然保护区',
+    '梵净山': '贵州梵净山国家级自然保护区',
+    '太白山': '陕西太白山国家级自然保护区',
+    '喀纳斯': '新疆喀纳斯国家级自然保护区',
+    '沙坡头': '宁夏沙坡头国家级自然保护区',
+    '浙江省杭州市临安区天目山景区': '浙江天目山国家级自然保护区',
+    '牯牛降': '安徽牯牛降国家级自然保护区',
+    '升金湖': '安徽升金湖国家级自然保护区',
+    '武夷山': '福建武夷山国家级自然保护区',
+    '南宁大明山风景旅游区': '广西大明山国家级自然保护区',
+    '海南尖峰岭国家森林公园': '海南尖峰岭国家级自然保护区',
+    '铜鼓岭景区': '海南铜鼓岭国家级自然保护区',
+    '海口东寨港红树林旅游区': '海南东寨港国家级自然保护区',
+    '医巫闾山': '辽宁医巫闾山国家级自然保护区',
+    '向海景区': '吉林向海国家级自然保护区',
+    '莫莫格景区': '吉林莫莫格国家级自然保护区',
+    '雅鲁藏布大峡谷': '西藏雅鲁藏布大峡谷国家级自然保护区',
+    '三江源': '青海三江源国家级自然保护区',
+    '可可西里': '青海可可西里国家级自然保护区',
+    '金佛山': '重庆金佛山国家级自然保护区'
+  };
+
+const SCENIC_PHOTOS = {
     '南京钟山风景名胜区': ['https://p0.ssl.qhimgs1.com/t0491cd429dd44d7b2a.jpg', 'https://p1.ssl.qhimgs1.com/t010c72ccf1d7d5f7a1.jpg', 'https://p1.ssl.qhimgs1.com/t0412e8ceb839ef18d1.jpg', 'https://p5.ssl.qhimgs1.com/t04d0fd632c0f5c8ce5.jpg', 'https://p0.ssl.qhimgs1.com/t0454a8dac863e22464.jpg'],
     '苏州拙政园': ['https://p3.ssl.qhimgs1.com/t04cc2857492aeabe69.jpg', 'https://p1.ssl.qhimgs1.com/t04c2d107268a68d9eb.jpg', 'https://p3.ssl.qhimgs1.com/t01da5a0b816d6631c3.jpg', 'https://p2.ssl.qhimgs1.com/t010945b65615bd69fc.jpg', 'https://p3.ssl.qhimgs1.com/t0160ced07089b52cd9.jpg'],
     '苏州周庄古镇': ['https://p2.ssl.qhimgs1.com/t015da55adfe71eeb38.jpg', 'https://p1.ssl.qhimgs1.com/t043953acdf9d4f5261.jpg', 'https://p0.ssl.qhimgs1.com/t01b8ecbffa4ea4731a.jpg', 'https://p0.ssl.qhimgs1.com/t0187a4b915f66ecfce.jpg', 'https://p2.ssl.qhimgs1.com/t01c05df60c7fb35b5c.jpg'],
@@ -29855,7 +29958,21 @@ var _hmt = _hmt || [];
     '石田古驿景区': ['https://p1.ssl.qhimgs1.com/t042dbb8897a76d8287.jpg', 'https://p2.ssl.qhimgs1.com/t015f95411f89252112.jpg', 'https://p0.ssl.qhimgs1.com/t0464bca3daf849453a.jpg'],
     '矿物晶体奇石文化博览园': ['https://p3.ssl.qhimgs1.com/t01f09ebd16629f730d.jpg', 'https://p3.ssl.qhimgs1.com/t01922d4bbd60727133.png', 'https://p3.ssl.qhimgs1.com/t04abe8e9275ff2932d.jpg'],
     '花海知音景区': ['https://p1.ssl.qhimgs1.com/t04344221a00679737b.jpg', 'https://p0.ssl.qhimgs1.com/t048f0426bfda023aba.jpg', 'https://p2.ssl.qhimgs1.com/t04376a00e33aca85a8.jpg'],
-    '鄂王城生态文化园': ['https://p1.ssl.qhimgs1.com/t01fb334aba327cfe1b.jpg', 'https://p5.ssl.qhimgs1.com/t0192cf2986cb247865.jpg', 'https://p5.ssl.qhimgs1.com/t018e4bd5141b6d5ef5.jpg']
+    '鄂王城生态文化园': ['https://p1.ssl.qhimgs1.com/t01fb334aba327cfe1b.jpg', 'https://p5.ssl.qhimgs1.com/t0192cf2986cb247865.jpg', 'https://p5.ssl.qhimgs1.com/t018e4bd5141b6d5ef5.jpg'],
+    '大青沟国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t013c80817493b48f7e.jpg', 'https://p5.ssl.qhimgs1.com/t01009363ddb15786cf.png', 'https://p1.ssl.qhimgs1.com/t01639493344b1a427b.jpg'],
+    '宁夏哈巴湖国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t0140c0d91b050a70ae.jpg', 'https://p1.ssl.qhimgs1.com/t0198c61033c54317e1.jpg', 'https://p5.ssl.qhimgs1.com/t01609adc3337d70eb5.jpg'],
+    '河南连康山国家级自然保护区': ['https://p5.ssl.qhimgs1.com/t01c7a915bfcabfe3ff.jpg', 'https://p5.ssl.qhimgs1.com/t04569c32de0883eeff.jpg', 'https://p3.ssl.qhimgs1.com/t01799acdec0bec2e9d.jpg'],
+    '黄桑国家级自然保护区曲幽谷景点': ['https://p5.ssl.qhimgs1.com/t01f250dc4c6e6bf48f.jpg', 'https://p1.ssl.qhimgs1.com/t011ade569d536ce24b.jpg', 'https://p5.ssl.qhimgs1.com/t03fa37b8a6bbba0615.jpg'],
+    '甘肃兴隆山国家级自然保护区': ['https://p2.ssl.qhimgs1.com/t01bf29689a40ea8902.jpg', 'https://p3.ssl.qhimgs1.com/t012b72cd343a2154b9.jpg', 'https://p5.ssl.qhimgs1.com/t013e7ca0db79991fbf.jpg'],
+    '珠穆朗玛峰国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t01fa8f4e3e206ab80a.jpg', 'https://p0.ssl.qhimgs1.com/t012e743ce7cc1da19a.jpg', 'https://p1.ssl.qhimgs1.com/t01a5a64b8bb4b45781.jpg'],
+    '重庆缙云山国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t01a5ebfaef29961126.jpg', 'https://p0.ssl.qhimgs1.com/t04ff0c5ad3afb2b474.jpg', 'https://p0.ssl.qhimgs1.com/t0129566386fbdfcc2a.jpg'],
+    '陕西牛背梁国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t030ac2302e8cd8ce4a.png', 'https://p0.ssl.qhimgs1.com/t019ebf6c4c0905faa0.jpg', 'https://p2.ssl.qhimgs1.com/t045b6ac1093a7edd7c.jpg'],
+    '青海孟达国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t01a3c293e65cce6656.jpg', 'https://p2.ssl.qhimgs1.com/t016b0f908463c985cc.jpg', 'https://p5.ssl.qhimgs1.com/t0446aa917002846d1f.jpg'],
+    '黑龙江凉水国家级自然保护区': ['https://p2.ssl.qhimgs1.com/t0443f43ce5dd48b8c2.jpg', 'https://p2.ssl.qhimgs1.com/t01ce6e205d82c2fd7c.jpg', 'https://p2.ssl.qhimgs1.com/t037d6378c838c32692.jpg'],
+    '哀牢山国家级自然保护区杜鹃湖景区': ['https://p0.ssl.qhimgs1.com/t01ae5673c2e13b820a.jpg', 'https://p0.ssl.qhimgs1.com/t01b0fbe671391d2540.jpg', 'https://p0.ssl.qhimgs1.com/t019c622b1a8ee08d20.jpg'],
+    '铜陵淡水豚国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t012a2e504e1eb27dee.jpg', 'https://p2.ssl.qhimgs1.com/t04f40656bb953cfbb8.jpg', 'https://p3.ssl.qhimgs1.com/t038b669fd182717dd9.jpg'],
+    '飞鹅保护区“鹅园”观光基地': ['https://p1.ssl.qhimgs1.com/t0102515993524bbfa7.jpg', 'https://p5.ssl.qhimgs1.com/t013afe15d3aab52fe5.jpg', 'https://p2.ssl.qhimgs1.com/t01c099b3185a588758.jpg'],
+    '湖南借母溪国家级自然保护区': ['https://p0.ssl.qhimgs1.com/t0123e4b5460674b684.jpg', 'https://p2.ssl.qhimgs1.com/t043f9adfdaf00dcb18.jpg', 'https://p1.ssl.qhimgs1.com/t043d8b84879e934b4b.jpg']
 };
 
   const FEATURED_PROVINCES = new Set(['江苏', '浙江', '四川', '云南', '北京', '安徽', '山东', '湖南', '福建', '广西']);
@@ -29941,6 +30058,9 @@ var _hmt = _hmt || [];
   let mapLevel = 'china';        // 'china' 全国省级视图 | 'province' 某省地级行政区视图
   let drillProvince = '';        // 当前下钻的省份（简称）
   let selectedCity = '';         // 当前按城市筛选的 GeoJSON 原始城市名
+  let globalQuery = '';          // 全国模糊检索关键词（跨省）
+  let globalSearchTimer = 0;     // 全国检索输入防抖定时器
+  let searchHighlightProvinces = []; // 当前检索命中的省份（地图高亮用）
   let currentCityNames = [];     // 当前市级视图中的全部城市名（用于清理选中态）
   const geoCache = {};           // 已加载并注册的省级 GeoJSON 缓存，键为 prov-{adcode}
 
@@ -29970,6 +30090,9 @@ var _hmt = _hmt || [];
     UI.quickProvince = document.getElementById('quickProvince');
     UI.detailScroll = document.getElementById('detailScroll');
     UI.detailContent = document.getElementById('detailContent');
+    UI.globalSearch = document.getElementById('globalSearch');
+    UI.globalSearchCount = document.getElementById('globalSearchCount');
+    UI.globalSearchClear = document.getElementById('globalSearchClear');
     UI.toast = document.getElementById('toast');
     UI.statusText = UI.mapStatus.querySelector('span');
   }
@@ -30031,6 +30154,18 @@ var _hmt = _hmt || [];
     UI.detailContent.addEventListener('click', onDetailClick);
     UI.detailContent.addEventListener('input', onDetailInput);
     UI.detailContent.addEventListener('change', onDetailChange);
+
+    if (UI.globalSearch) {
+      UI.globalSearch.addEventListener('input', onGlobalSearchInput);
+      UI.globalSearch.addEventListener('keydown', onGlobalSearchKeydown);
+    }
+    if (UI.globalSearchClear) {
+      UI.globalSearchClear.addEventListener('click', function () {
+        clearGlobalSearchInput();
+        exitGlobalSearch();
+        if (UI.globalSearch) UI.globalSearch.focus();
+      });
+    }
   }
 
   function showToast(message) {
@@ -30166,6 +30301,7 @@ var _hmt = _hmt || [];
       setMapStatus('is-ready', '在线底图');
       bindResize();
       if (selectedProvince) highlightProvince(selectedProvince);
+      if (searchHighlightProvinces.length) applySearchHighlight(searchHighlightProvinces);
     } catch (error) {
       handleMapFailure('地图渲染失败');
     }
@@ -30269,7 +30405,7 @@ var _hmt = _hmt || [];
         map: 'china',
         roam: true,
         scaleLimit: { min: 0.8, max: 6 },
-        selectedMode: 'single',
+        selectedMode: 'multiple',
         zoom: 1.03,
         layoutCenter: ['50%', '50%'],
         layoutSize: '94%'
@@ -30853,6 +30989,7 @@ var _hmt = _hmt || [];
 
   function selectProvince(shortName) {
     if (!provinceData[shortName]) return;
+    resetGlobalSearchUI();
     selectedProvince = shortName;
     activeLevel = 'all';
     searchTerm = '';
@@ -30974,13 +31111,14 @@ var _hmt = _hmt || [];
     setupIntroClamps(cardsWrap);
   }
 
-  function buildCard(item) {
+  function buildCard(item, provinceName) {
     const placeholder = makePlaceholderImage(item.name);
     const gallery = getGallery(item.name);
     const hasPhotos = gallery.length > 0;
     const card = document.createElement('article');
     card.className = 'scenic-card';
     card.setAttribute('data-name', item.name);
+    card.setAttribute('data-province', provinceName || '');
 
     const zoomHint = '<span class="zoom-hint" aria-hidden="true">'
       + '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="6.4"/><path d="m16 16 4.4 4.4M11 8.4v5.2M8.4 11h5.2"/></svg>'
@@ -31007,9 +31145,9 @@ var _hmt = _hmt || [];
       + '  <div class="card-title-row"><h3>' + escapeHtml(item.name) + '</h3>'
       + '    <button class="locate-btn" type="button" title="在地图上定位该景区">' + pinIcon() + '<span>定位</span></button>'
       + '  </div>'
-      + (getCity(item.name) ? '  <p class="card-loc">' + pinIcon() + '<span>' + escapeHtml(getCity(item.name)) + '</span></p>' : '')
+      + (spotLocationLabel(item, provinceName) ? '  <p class="card-loc">' + pinIcon() + '<span>' + escapeHtml(spotLocationLabel(item, provinceName)) + '</span></p>' : '')
       + '  <p class="intro is-clamped">' + escapeHtml(item.intro) + '</p>'
-      + '  <div class="card-detail" hidden>' + buildDetailHtml(item) + '</div>'
+      + '  <div class="card-detail" hidden>' + buildDetailHtml(item, provinceName) + '</div>'
       + '  <button class="intro-toggle" type="button" aria-expanded="false">'
       + '    <span class="toggle-label">展开全文</span>'
       + '    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>'
@@ -31029,13 +31167,16 @@ var _hmt = _hmt || [];
 
   // 展开全文后的详情：优先使用人工撰写的详细描述（SCENIC_DETAILS），
   // 未收录的景区按名称推断类型，补充通用的游览参考信息。
-  function buildDetailHtml(item) {
+  function buildDetailHtml(item, provinceName) {
     const detail = typeof SCENIC_DETAILS !== 'undefined' ? SCENIC_DETAILS[item.name] : '';
-    const text = detail || buildFallbackDetail(item);
+    const text = detail || buildFallbackDetail(item, provinceName);
+    const provinceText = provinceName || selectedProvince;
     const facts = '<div class="detail-facts">'
       + '<span><i>等级</i>国家' + item.level + '级景区</span>'
-      + (getCity(item.name) ? '<span><i>位置</i>' + escapeHtml(selectedProvince + ' · ' + getCity(item.name)) + '</span>' : '<span><i>位置</i>' + escapeHtml(selectedProvince) + '</span>')
+      + (getCity(item.name) ? '<span><i>位置</i>' + escapeHtml(provinceText + ' · ' + getCity(item.name)) + '</span>' : '<span><i>位置</i>' + escapeHtml(provinceText) + '</span>')
       + '<span><i>类型</i>' + escapeHtml(guessSpotKind(item.name)) + '</span>'
+      + (typeof SCENIC_RESERVES !== 'undefined' && SCENIC_RESERVES[item.name]
+        ? '<span><i>保护区</i>' + escapeHtml(SCENIC_RESERVES[item.name]) + '</span>' : '')
       + '</div>';
     const source = detail
       ? '<p class="detail-source">景区档案 · 依据公开旅行资料与文旅部门信息整理</p>'
@@ -31051,10 +31192,11 @@ var _hmt = _hmt || [];
     return '综合景区';
   }
 
-  function buildFallbackDetail(item) {
+  function buildFallbackDetail(item, provinceName) {
+    const provinceText = provinceName || selectedProvince;
     const city = getCity(item.name);
-    const where = city ? city.replace(/\s*·\s*/g, '') : selectedProvince;
-    const opening = item.name + '位于' + where + '，是' + selectedProvince + '收录的国家' + item.level + '级旅游景区。';
+    const where = city ? provinceText + city.replace(/\s*·\s*/g, '') : provinceText;
+    const opening = item.name + '位于' + where + '，是' + provinceText + '收录的国家' + item.level + '级旅游景区。';
     const kind = guessSpotKind(item.name);
     let tips;
     if (kind === '人文古迹') {
@@ -31080,6 +31222,13 @@ var _hmt = _hmt || [];
   function getCity(name) {
     const map = typeof SCENIC_CITIES !== 'undefined' ? SCENIC_CITIES : null;
     return map && map[name] ? map[name] : '';
+  }
+
+  // 卡片位置行：省级视图只显示城市，全国检索结果显示“省份 · 城市”。
+  function spotLocationLabel(item, provinceName) {
+    const city = getCity(item.name);
+    if (!provinceName) return city;
+    return city ? provinceName + ' · ' + city : provinceName;
   }
 
   function pinIcon() {
@@ -31113,6 +31262,18 @@ var _hmt = _hmt || [];
     const chip = event.target.closest('[data-quick-province]');
     if (chip) {
       selectProvince(chip.getAttribute('data-quick-province'));
+      return;
+    }
+
+    const hitProvinceChip = event.target.closest('[data-search-province]');
+    if (hitProvinceChip) {
+      openProvinceWithQuery(hitProvinceChip.getAttribute('data-search-province'), globalQuery);
+      return;
+    }
+
+    if (event.target.closest('#backFromSearch')) {
+      clearGlobalSearchInput();
+      exitGlobalSearch();
       return;
     }
 
@@ -31179,8 +31340,320 @@ var _hmt = _hmt || [];
     const hitCard = event.target.closest('.scenic-card');
     if (hitCard) {
       if (event.target.closest('.card-detail')) return; // 展开区内选中文本不触发定位
-      locateSpotOnMap(hitCard.getAttribute('data-name'), hitCard);
+      const cardProvince = hitCard.getAttribute('data-province');
+      if (cardProvince) {
+        focusSpotNationwide(cardProvince, hitCard.getAttribute('data-name'), hitCard);
+      } else {
+        locateSpotOnMap(hitCard.getAttribute('data-name'), hitCard);
+      }
     }
+  }
+
+  // =========================================================
+  // 全国模糊检索：跨省匹配景区名称，地图同步标出命中省份
+  // =========================================================
+  const GLOBAL_SEARCH_LIMIT = 240;
+
+  function onGlobalSearchInput(event) {
+    const value = event.target.value;
+    if (UI.globalSearchClear) UI.globalSearchClear.hidden = !value;
+    window.clearTimeout(globalSearchTimer);
+    globalSearchTimer = window.setTimeout(function () {
+      runGlobalSearch(value);
+    }, 240);
+  }
+
+  function onGlobalSearchKeydown(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      window.clearTimeout(globalSearchTimer);
+      runGlobalSearch(event.target.value);
+      return;
+    }
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      clearGlobalSearchInput();
+      exitGlobalSearch();
+    }
+  }
+
+  function clearGlobalSearchInput() {
+    window.clearTimeout(globalSearchTimer);
+    if (UI.globalSearch) UI.globalSearch.value = '';
+    if (UI.globalSearchClear) UI.globalSearchClear.hidden = true;
+    if (UI.globalSearchCount) UI.globalSearchCount.textContent = '';
+  }
+
+  function resetGlobalSearchUI() {
+    globalQuery = '';
+    clearGlobalSearchInput();
+  }
+
+  // 语义概念检索：把“海滩/沙滩/海滨”映射到真实海滩类景区，
+  // 避免仅凭“海”字近似匹配把湖泊、山岳等带“海”字景区也带出来。
+  const BEACH_CONCEPT = {
+    pattern: /海滩|沙滩|海滨|海水浴场|浴场|银滩|金沙滩|黄金海岸|白沙湾|大角湾|亚龙湾|大东海|海棠湾|清水湾|石梅湾|日月湾|巽寮湾|双月湾|十里银滩|环岛路|鼓浪屿|蜈支洲岛|分界洲岛|涠洲岛|南澳岛|平潭岛|东山岛|湄洲岛|海陵岛|连岛|棒棰岛|金石滩|东戴河|北戴河|南戴河|白沙门|长岛|养马岛|三亚西岛/,
+    // 名字带“海滩/银滩”但并非海滨沙滩的景区，需排除。
+    exclude: ['红海滩风景廊道', '红海滩湿地科学馆景区', '西咸新区欢乐谷·玛雅海滩景区',
+      '亚龙湾热带天堂森林公园', '亚龙湾国际玫瑰谷', '亚龙湾海底世界',
+      '砚山县清水湾生态康养旅游区', '泗县清水湾公园', '银滩里湿地生态旅游区',
+      '南通启东市梦幻长岛景区', '辽宁北方金沙滩国家沙漠公园', '宿迁市沙滩公园',
+      '乌伦古湖金沙滩景区', '浙江省丽水市云和县长汀沙滩景区']
+  };
+  // “林场”类：国有林场、林业局、森工、经营所等林业经营单位，
+  // 排除石林、碑林、万柏林区等仅带“林”字的地名/景观。
+  const FOREST_FARM_CONCEPT = {
+    pattern: /林场|林业局|经营所|森工|林区/,
+    excludePattern: /^(万柏林区|碑林区)/
+  };
+  const SEARCH_CONCEPTS = {
+    '海滩': BEACH_CONCEPT,
+    '沙滩': BEACH_CONCEPT,
+    '海滨': BEACH_CONCEPT,
+    '海水浴场': BEACH_CONCEPT,
+    '海边': BEACH_CONCEPT,
+    '林场': FOREST_FARM_CONCEPT,
+    '林业局': FOREST_FARM_CONCEPT,
+    '林区': FOREST_FARM_CONCEPT,
+    '森工': FOREST_FARM_CONCEPT,
+    '经营所': FOREST_FARM_CONCEPT
+  };
+
+  // 名称匹配评分：先按子串命中，再退化为单字覆盖率，支持“泉水”→“趵突泉”这类近似语义。
+  function tokenScore(name, text, token) {
+    const index = name.indexOf(token);
+    if (index === 0) return 120;
+    if (index > 0) return 100;
+    const chars = Array.from(new Set(token));
+    if (chars.length < 2) return -1;
+    // 近似匹配必须命中首字，避免“泉水”把只含水字的景区全带出来。
+    if (name.indexOf(token[0]) === -1) return -1;
+    let covered = 0;
+    chars.forEach(function (ch) {
+      if (name.indexOf(ch) !== -1) covered += 1;
+    });
+    const ratio = covered / chars.length;
+    if (ratio < 0.5) return -1;
+    // 结尾字命中更接近“泉水/月牙泉”这类说法，额外加权。
+    const endingBonus = name.endsWith(token[0]) ? 20 : 0;
+    // 只命中首字时，必须名称以该字结尾或简介中出现完整关键词，避免“温泉”命中“刘伯温故里”。
+    if (!endingBonus && text.indexOf(token) === -1) return -1;
+    return 40 + ratio * 10 + endingBonus;
+  }
+
+  // 关键词按空格拆分，每个词都要命中；同等级内按匹配度从高到低排。
+  function collectGlobalMatches(query) {
+    const tokens = String(query).toLowerCase().split(/\s+/).filter(Boolean);
+    if (!tokens.length) return [];
+    const hits = [];
+    Object.keys(provinceData).forEach(function (province) {
+      (provinceData[province] || []).forEach(function (item) {
+        const name = String(item.name || '').toLowerCase();
+        const reserveAlias = typeof SCENIC_RESERVES !== 'undefined' && SCENIC_RESERVES[item.name]
+          ? String(SCENIC_RESERVES[item.name]).toLowerCase() : '';
+        const detail = typeof SCENIC_DETAILS !== 'undefined' ? (SCENIC_DETAILS[item.name] || '') : '';
+        const text = (String(item.intro || '') + detail).toLowerCase();
+        let score = 0;
+        for (let i = 0; i < tokens.length; i += 1) {
+          const concept = SEARCH_CONCEPTS[tokens[i]];
+          let value;
+          if (concept) {
+            // 概念词只按名称判定，且先剔除同名但并非该类型的景区。
+            const rawName = String(item.name || '');
+            const excluded = (concept.exclude && concept.exclude.indexOf(rawName) !== -1)
+              || (concept.excludePattern && concept.excludePattern.test(rawName));
+            value = excluded ? -1 : (concept.pattern.test(rawName) ? 130 : -1);
+          } else {
+            value = tokenScore(name, text, tokens[i]);
+            // 名称未命中时用保护区全称兜底，得分低于名称直接命中，排在同级后面。
+            if (value < 0 && reserveAlias) {
+              const aliasScore = tokenScore(reserveAlias, text, tokens[i]);
+              if (aliasScore >= 0) value = aliasScore - 25;
+            }
+          }
+          if (value < 0) { score = -1; break; }
+          score += value;
+        }
+        if (score >= 0) hits.push({ province: province, item: item, score: score });
+      });
+    });
+    hits.sort(function (a, b) {
+      const diff = (LEVEL_ORDER[a.item.level] ?? 9) - (LEVEL_ORDER[b.item.level] ?? 9);
+      if (diff) return diff;
+      if (a.score !== b.score) return b.score - a.score;
+      const lenDiff = a.item.name.length - b.item.name.length;
+      if (lenDiff) return lenDiff;
+      if (a.province !== b.province) return a.province.localeCompare(b.province, 'zh');
+      return a.item.name.localeCompare(b.item.name, 'zh');
+    });
+    return hits;
+  }
+
+  function runGlobalSearch(raw) {
+    const query = String(raw == null ? '' : raw).trim();
+    globalQuery = query;
+    if (!query) {
+      exitGlobalSearch();
+      return;
+    }
+
+    if (mapLevel === 'province') {
+      selectedProvince = '';
+      selectedCity = '';
+      backToNation(true);
+    }
+    selectedProvince = '';
+    selectedCity = '';
+    if (UI.quickProvince) UI.quickProvince.value = '';
+
+    const hits = collectGlobalMatches(query);
+    const provinces = [];
+    hits.forEach(function (hit) {
+      if (provinces.indexOf(hit.province) === -1) provinces.push(hit.province);
+    });
+    applySearchHighlight(provinces);
+    searchHighlightProvinces = provinces;
+    renderGlobalResults(query, hits, provinces);
+    if (UI.globalSearchCount) {
+      UI.globalSearchCount.textContent = hits.length ? hits.length + ' 处' : '无匹配';
+    }
+  }
+
+  function exitGlobalSearch() {
+    globalQuery = '';
+    searchHighlightProvinces = [];
+    clearGlobalSearchInput();
+    selectedProvince = '';
+    selectedCity = '';
+    if (mapLevel === 'province') backToNation(true);
+    clearMapSelection();
+    if (UI.quickProvince) UI.quickProvince.value = '';
+    if (mapFailed) {
+      renderFallback('离线数据模式');
+    } else {
+      renderInitialGuide();
+    }
+  }
+
+  // 命中省份使用 ECharts 选中态（琥珀金）突出标注，需 selectedMode: 'multiple'。
+  function applySearchHighlight(provinces) {
+    if (!chart || !mapReady || mapLevel !== 'china') return;
+    try {
+      Object.keys(geoNamesByShort).forEach(function (key) {
+        chart.dispatchAction({ type: 'unselect', seriesIndex: 0, name: geoNamesByShort[key] });
+      });
+      provinces.forEach(function (name) {
+        const geoName = geoNamesByShort[name];
+        if (geoName) chart.dispatchAction({ type: 'select', seriesIndex: 0, name: geoName });
+      });
+    } catch (error) {
+      // 高亮失败不影响列表浏览。
+    }
+  }
+
+  function renderGlobalResults(query, hits, provinces) {
+    const five = hits.filter(function (hit) { return hit.item.level === '5A'; }).length;
+    const four = hits.filter(function (hit) { return hit.item.level === '4A'; }).length;
+    const three = hits.filter(function (hit) { return hit.item.level === '3A'; }).length;
+    // 命中省份标签按命中数量从多到少排列，数量相同按省名排序。
+    const chips = provinces.map(function (province) {
+      return {
+        name: province,
+        count: hits.filter(function (hit) { return hit.province === province; }).length
+      };
+    }).sort(function (a, b) {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name, 'zh');
+    }).map(function (entry) {
+      return '<button class="province-chip" type="button" data-search-province="' + escapeHtml(entry.name) + '">'
+        + '<i></i>' + escapeHtml(entry.name) + ' · ' + entry.count + ' 处</button>';
+    }).join('');
+
+    const shown = hits.slice(0, GLOBAL_SEARCH_LIMIT);
+    const rest = hits.length - shown.length;
+
+    UI.detailContent.innerHTML = ''
+      + '<section class="province-view" aria-label="全国景区检索结果">'
+      + '  <div class="province-hero">'
+      + '    <div class="hero-top">'
+      + '      <div>'
+      + '        <span class="eyebrow">Nationwide search</span>'
+      + '        <div class="province-name-row"><h2>“' + escapeHtml(query) + '”</h2><span class="curated-badge">全国检索</span></div>'
+      + '        <p class="province-tagline">按名称模糊匹配 · 涉及 ' + provinces.length + ' 个省级行政区</p>'
+      + '      </div>'
+      + '      <button class="back-btn" id="backFromSearch" type="button">清除检索</button>'
+      + '    </div>'
+      + '    <div class="stat-strip">'
+      + '      <div class="stat-item"><b>' + hits.length + '</b><span>命中景区</span></div>'
+      + '      <div class="stat-item is-5a"><b>' + five + '</b><span>5A 景区</span></div>'
+      + '      <div class="stat-item is-4a"><b>' + four + '</b><span>4A 景区</span></div>'
+      + '      <div class="stat-item is-3a"><b>' + three + '</b><span>3A 景区</span></div>'
+      + '    </div>'
+      + '  </div>'
+      + (provinces.length
+        ? '  <div class="quick-picks search-picks">'
+          + '    <div class="quick-picks-label"><span>命中省份</span><em>点击按省查看</em></div>'
+          + '    <div class="chip-row">' + chips + '</div>'
+          + '  </div>'
+        : '')
+      + '  <p class="results-meta">按 5A → 4A → 3A 排序，同等级按匹配度排列，共 <strong>' + hits.length + '</strong> 处'
+      + (rest > 0 ? '；当前显示前 ' + shown.length + ' 处，增加关键词可缩小范围' : '') + '</p>'
+      + '  <div class="cards-grid" id="cardsWrap"></div>'
+      + '</section>';
+
+    const cardsWrap = document.getElementById('cardsWrap');
+    if (!hits.length) {
+      cardsWrap.innerHTML = ''
+        + '<div class="empty-state">'
+        + '  <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/><path d="M8.5 11h5"/></svg>'
+        + '  <b>没有匹配的景区</b>'
+        + '  <span>换个关键词试试，如“森林公园”“古镇”“温泉”；多个关键词用空格分隔。</span>'
+        + '</div>';
+    } else {
+      const fragment = document.createDocumentFragment();
+      shown.forEach(function (hit) {
+        fragment.appendChild(buildCard(hit.item, hit.province));
+      });
+      cardsWrap.appendChild(fragment);
+      setupIntroClamps(cardsWrap);
+    }
+    UI.detailScroll.scrollTop = 0;
+  }
+
+  // 命中省份标签：进入该省并沿用当前关键词过滤。
+  function openProvinceWithQuery(province, query) {
+    const keyword = query;
+    selectProvince(province);
+    if (!keyword) return;
+    searchTerm = keyword;
+    const input = document.getElementById('scenicSearch');
+    if (input) input.value = keyword;
+    updateCards();
+  }
+
+  // 全国检索结果中的卡片定位：下钻到目标省份并聚焦所在城市，右侧列表保持不变。
+  async function focusSpotNationwide(province, spotName, cardEl) {
+    if (!spotName) return;
+    if (cardEl) markActiveCard(cardEl);
+    if (!mapReady || mapFailed || !chart) {
+      showToast('地图底图未就绪，暂时无法联动定位');
+      return;
+    }
+    if (mapLevel !== 'province' || drillProvince !== province) {
+      selectedProvince = province;
+      await drillToProvince(province);
+    }
+    if (mapLevel !== 'province' || drillProvince !== province) {
+      showToast('市级边界加载失败，无法完成定位');
+      return;
+    }
+    const geoName = findCityGeoName(province, getCity(spotName));
+    if (!geoName) {
+      showToast('未能在地图上定位到该景区所在城市');
+      return;
+    }
+    focusCityOnMap(province, geoName);
+    showToast(spotName + ' · 已定位至' + normalizeCityKey(geoName));
   }
 
   function resetFilters() {
