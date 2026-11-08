@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>山河图鉴 · 全国星级景区交互地图</title>
 <style>
   :root {
@@ -1077,6 +1077,7 @@
     cursor: zoom-in;
     user-select: none;
     -webkit-user-drag: none;
+    touch-action: none;
   }
   .lightbox-figure img.is-zoomed { cursor: grab; }
   .lightbox-figure img.is-dragging { transition: none; cursor: grabbing; }
@@ -1133,9 +1134,26 @@
   .lightbox-next:hover { transform: translateY(-50%) translateX(2px); }
 
   @media (max-width: 760px) {
-    .lightbox-prev { left: 6px; }
-    .lightbox-next { right: 6px; }
-    .lightbox-close { top: -40px; }
+    .lightbox {
+      padding: calc(10px + env(safe-area-inset-top)) 8px calc(12px + env(safe-area-inset-bottom));
+      overscroll-behavior: contain;
+    }
+    .lightbox-figure { max-width: 100%; }
+    .lightbox-figure img { max-height: 74vh; border-radius: 10px; }
+    .lightbox-prev { left: 4px; }
+    .lightbox-next { right: 4px; }
+    .lightbox-close {
+      top: 8px;
+      right: 8px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      background: rgba(24, 28, 25, 0.62);
+    }
+    .lightbox-prev,
+    .lightbox-next { width: 44px; height: 44px; }
+    .lightbox-caption { flex-wrap: wrap; gap: 4px 12px; padding: 0 2px; }
+    .lightbox-caption b { font-size: 14px; }
   }
 
   .empty-state {
@@ -30743,6 +30761,8 @@ const SCENIC_PHOTOS = {
   let lightboxEl = null;
   const lightboxState = { name: '', photos: [], index: 0 };
   const lightboxView = { scale: 1, tx: 0, ty: 0, dragging: false, startX: 0, startY: 0, baseX: 0, baseY: 0 };
+  // 手机端返回键：打开大图时压入一条历史记录，返回时先关大图而不是退出页面。
+  const lightboxHistory = { active: false, pendingBack: false };
 
   function applyLightboxView() {
     if (!lightboxEl) return;
@@ -30822,6 +30842,7 @@ const SCENIC_PHOTOS = {
       zoomLightboxAt(event.clientX, event.clientY, Math.exp(-event.deltaY * 0.002));
     }, { passive: false });
     image.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'touch') return; // 触摸手势由下方 touch 事件处理
       if (lightboxView.scale <= 1 || event.button !== 0) return;
       lightboxView.dragging = true;
       lightboxView.startX = event.clientX; lightboxView.startY = event.clientY;
@@ -30841,6 +30862,54 @@ const SCENIC_PHOTOS = {
     }
     image.addEventListener('pointerup', endDrag);
     image.addEventListener('pointercancel', endDrag);
+    // 手机端手势：双指缩放、放大后单指拖动、未放大时左右滑动切换照片
+    let touchStart = null;
+    image.addEventListener('touchstart', function (event) {
+      if (event.touches.length === 2) {
+        const dx = event.touches[0].clientX - event.touches[1].clientX;
+        const dy = event.touches[0].clientY - event.touches[1].clientY;
+        touchStart = { mode: 'pinch', dist: Math.hypot(dx, dy) || 1, scale: lightboxView.scale };
+      } else if (event.touches.length === 1) {
+        touchStart = {
+          mode: lightboxView.scale > 1 ? 'pan' : 'swipe',
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY,
+          tx: lightboxView.tx,
+          ty: lightboxView.ty
+        };
+      }
+    }, { passive: true });
+    image.addEventListener('touchmove', function (event) {
+      if (!touchStart) return;
+      if (event.touches.length === 2 && touchStart.mode === 'pinch') {
+        event.preventDefault();
+        const dx = event.touches[0].clientX - event.touches[1].clientX;
+        const dy = event.touches[0].clientY - event.touches[1].clientY;
+        const dist = Math.hypot(dx, dy) || 1;
+        const target = Math.min(4, Math.max(1, touchStart.scale * dist / touchStart.dist));
+        const cx = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+        const cy = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+        zoomLightboxAt(cx, cy, target / lightboxView.scale);
+      } else if (event.touches.length === 1 && touchStart.mode === 'pan' && lightboxView.scale > 1) {
+        event.preventDefault();
+        lightboxView.tx = touchStart.tx + event.touches[0].clientX - touchStart.x;
+        lightboxView.ty = touchStart.ty + event.touches[0].clientY - touchStart.y;
+        clampLightboxPan(); applyLightboxView();
+      }
+    }, { passive: false });
+    image.addEventListener('touchend', function (event) {
+      if (!touchStart) return;
+      if (event.touches.length) return; // 双指中抬起一指，等待手势结束
+      const gesture = touchStart;
+      touchStart = null;
+      if (gesture.mode !== 'swipe' || !event.changedTouches.length) return;
+      const dx = event.changedTouches[0].clientX - gesture.x;
+      const dy = event.changedTouches[0].clientY - gesture.y;
+      if (Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+        stepLightbox(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+    image.addEventListener('touchcancel', function () { touchStart = null; }, { passive: true });
     image.addEventListener('dblclick', function (event) {
       event.preventDefault();
       if (lightboxView.scale > 1) resetLightboxView();
@@ -30877,6 +30946,10 @@ const SCENIC_PHOTOS = {
     void el.offsetWidth; // 触发过渡动画
     el.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    if (!lightboxHistory.active) {
+      history.pushState({ scenicPhoto: true }, '');
+      lightboxHistory.active = true;
+    }
   }
 
   function renderLightbox() {
@@ -30899,12 +30972,28 @@ const SCENIC_PHOTOS = {
     renderLightbox();
   }
 
-  function closeLightbox() {
+  function closeLightbox(fromHistory) {
     if (!lightboxEl) return;
     lightboxEl.classList.remove('is-open');
     lightboxEl.hidden = true;
     document.body.style.overflow = '';
+    if (lightboxHistory.active) {
+      lightboxHistory.active = false;
+      if (!fromHistory && history.state && history.state.scenicPhoto) {
+        // 用户主动关闭（按钮/Esc/点遮罩）时回收这条历史记录，避免返回键多走一步。
+        lightboxHistory.pendingBack = true;
+        history.back();
+      }
+    }
   }
+
+  window.addEventListener('popstate', function () {
+    if (lightboxHistory.pendingBack) {
+      lightboxHistory.pendingBack = false;
+      return;
+    }
+    if (lightboxEl && !lightboxEl.hidden) closeLightbox(true);
+  });
 
   // =========================================================
   // 右侧面板：引导 / 省份 / 降级
