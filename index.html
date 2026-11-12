@@ -1077,6 +1077,8 @@
   .lightbox.is-open .lightbox-figure { transform: scale(1); }
 
   .lightbox-figure img {
+    position: relative;
+    z-index: 1;
     display: block;
     max-width: 100%;
     max-height: 78vh;
@@ -1113,6 +1115,7 @@
 
   .lightbox-btn {
     position: absolute;
+    z-index: 5;
     display: grid;
     place-items: center;
     border: 1px solid rgba(255, 250, 240, 0.22);
