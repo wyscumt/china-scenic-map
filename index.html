@@ -34301,32 +34301,37 @@ const SCENIC_PHOTOS = {
   }
 
   function guessSpotKind(name) {
-    if (/石窟|寺|庙|陵|祠|阁|楼|故居|故里|博物|纪念|遗址|王府|皇城|宫|碑林|古城墙|大院/.test(name)) return '人文古迹';
-    if (/古城|古镇|古街|街区|古村|八寨|屯堡/.test(name)) return '古镇聚落';
-    if (/瀑布|峡谷|山|峰|林|洞|海|湖|岛|湿地|草原|沙漠|丹霞|梯田|温泉|江|河|溪|潭|湾|滩|源|海岸|冰川|雪/.test(name)) return '自然风光';
-    if (/影视|乐园|动物|植物园|主题|度假|马戏|方特|恐龙/.test(name)) return '主题休闲';
+    if (/图书馆|博物馆|美术馆|科技馆|展览馆|纪念馆|文化馆|大剧院|艺术馆|陈列馆/.test(name)) return '文化场馆';
+    if (/农业|农庄|农场|采摘|茶园|果园|花海|花田|田园|生态园|农博|观光园|种植园/.test(name)) return '田园农庄';
+    if (/步行街|商圈|广场|夜市/.test(name)) return '城市街区';
+    if (/影视|乐园|动物|植物园|主题|度假|马戏|方特|恐龙|水上|海洋馆/.test(name)) return '主题休闲';
+    if (/石窟|寺|庙|陵|祠|阁|楼|故居|故里|遗址|王府|皇城|碑林|古城墙|大院|书院|塔/.test(name)) return '人文古迹';
+    if (/古城|古镇|古街|街区|古村|屯堡/.test(name)) return '古镇聚落';
+    if (/瀑布|峡谷|山|峰|林|洞|海|湖|岛|湿地|草原|沙漠|丹霞|梯田|温泉|江|河|溪|潭|湾|滩|海岸|冰川|雪/.test(name)) return '自然风光';
     return '综合景区';
   }
 
   function buildFallbackDetail(item, provinceName) {
     const provinceText = provinceName || selectedProvince;
-    const city = getCity(item.name);
-    const where = city ? provinceText + city.replace(/\s*·\s*/g, '') : provinceText;
-    const opening = item.name + '位于' + where + '，是' + provinceText + '收录的国家' + item.level + '级旅游景区。';
+    const city = (getCity(item.name) || '').replace(/\s*·\s*/g, '');
     const kind = guessSpotKind(item.name);
-    let tips;
-    if (kind === '人文古迹') {
-      tips = '参观前可先在游客中心了解陈列脉络与讲解服务，代表性建筑与重点文物值得放慢节奏细看；请遵守文物保护规定，勿触摸刻画，部分室内区域请勿使用闪光灯拍照。';
-    } else if (kind === '古镇聚落') {
-      tips = '街巷格局与老店民居保留着浓厚的历史生活气息，清晨与入夜游人较少时更能感受原有韵味；可留意非遗展演、地方小吃与特色院落，建议放慢脚步步行游览。';
-    } else if (kind === '自然风光') {
-      tips = '游览以步道、观景台或游船等方式串联主要景点，建议预留半天至一天时间；日出日落前后光线层次最佳，出行前请留意天气、索道与游船班次等运营信息。';
-    } else if (kind === '主题休闲') {
-      tips = '园区项目适合家庭与亲子游览，热门项目节假日排队较长，建议提前通过官方渠道了解演出时刻与开放安排，合理规划游玩顺序。';
-    } else {
-      tips = '景区配套较为完善，可通过官方公众号或游客中心获取导览图与当日活动信息；建议避开节假日高峰，预留充足时间从容游览。';
+    const tipMap = {
+      '人文古迹': '参观时请遵守文物保护规定。',
+      '古镇聚落': '以步行为主，清晨与傍晚更清静。',
+      '城市街区': '开放式街区，傍晚至夜间较热闹。',
+      '文化场馆': '参观前请查询开放时间与预约要求。',
+      '田园农庄': '采摘项目随季节变化，建议先咨询。',
+      '主题休闲': '节假日热门项目排队较长，建议早到。',
+      '自然风光': '户外游览请关注天气与开放公告。',
+      '综合景区': '可在游客中心获取导览图。'
+    };
+    const tips = tipMap[kind] || tipMap['综合景区'];
+    const intro = (item.intro || '').trim().replace(/[。；;]\s*$/, '');
+    if (intro) {
+      return intro + '。' + tips;
     }
-    return opening + tips;
+    const where = city ? provinceText + city : provinceText;
+    return item.name + '位于' + where + '，为国家' + item.level + '级旅游景区。' + tips;
   }
 
   function getGallery(name) {
