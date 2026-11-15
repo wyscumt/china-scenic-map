@@ -203,6 +203,19 @@
     text-align: right;
   }
   .update-note b { color: var(--gold-deep); font-weight: 700; }
+  .admin-entry {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 9px;
+    border: 1px solid rgba(185, 138, 47, .5);
+    border-radius: 999px;
+    color: var(--gold-deep);
+    font-size: 11px;
+    letter-spacing: .04em;
+    text-decoration: none;
+  }
+  .admin-entry:hover { background: rgba(185, 138, 47, .14); }
+  .admin-entry[hidden] { display: none; }
 
   /* ---------- 主布局 ---------- */
   .workspace {
@@ -1347,7 +1360,8 @@
       </div>
     </div>
     <div class="header-side">
-      <p class="update-note">2026年11月12日更新 · 新增景区信息 <b>1021</b> 条 · 补充全国智能模糊检索</p>
+      <p class="update-note">2026年11月15日更新 · 新增景区信息 <b>1022</b> 条 · 补充全国智能模糊检索</p>
+      <a class="admin-entry" id="adminEntry" href="admin.html" hidden>后台管理</a>
       <div class="header-row">
         <div class="legend" aria-label="景区等级说明">
           <span><i class="dot dot-5a"></i>5A 景区</span>
@@ -1360,6 +1374,12 @@
       </div>
     </div>
   </header>
+  <script>
+    // 后台管理入口仅在本地运行时显示，线上版本不暴露。
+    if (['localhost', '127.0.0.1', '::1'].indexOf(location.hostname) >= 0) {
+      document.getElementById('adminEntry').hidden = false;
+    }
+  </script>
 
   <div class="lede">
     <p>从一张省域地图出发，翻阅 <em>34 个省级行政区</em> 的国家 5A 与 4A 级景区。滚轮缩放、拖拽漫游，点击一方轮廓，读它的山水与人文。</p>
@@ -2757,6 +2777,7 @@ var _hmt = _hmt || [];
         { name: '浙江省台州市椒江区台州海洋世界', level: '4A', intro: '椒江区的海洋馆，展区按海域分设，海底隧道与鲨鱼池是重点，每天有海狮和美人鱼表演，适合亲子游览。', image: '' },
         { name: '浙江省台州市临海市灵湖景区', level: '4A', intro: '临海大洋街道的湖泊景区，湖面开阔，环湖步道串起广场、荷塘与桥梁，灵湖公园与体育馆相邻，夜景灯光较好。', image: '' },
         { name: '长屿硐天旅游区', level: '4A', intro: '温岭新河镇的人工采石硐群，自南北朝起凿石留下上千个洞窟，观夕硐、水云硐与双门硐各具规模，洞内可听岩洞音乐。', image: '' },
+        { name: '台州温岭方山景区', level: '4A', intro: '温岭大溪镇的北雁荡山余脉，以复活破火山口构造和流纹质火山岩平台著称。四周50—100米绝壁环抱山顶平台，湖潭、虬松与溪瀑相映，可游方岩书院、梅雨瀑、鹊桥、上下天湖，山顶可眺温黄平原；云海佛光、日月同升、瀑布倒流并称“方山三绝”。', image: '' },
         { name: '浙江省丽水市松阳县松阳双童山景区', level: '4A', intro: '松阳水南街道岩下村的山地，两座岩峰并立如童子，玻璃栈道、滑索和滑道沿崖布置，可俯瞰松阳盆地与茶园。', image: '' },
         { name: '浙江省丽水市莲都区古堰画乡景区', level: '4A', intro: '莲都碧湖镇的通济堰与画乡片区，通济堰为南朝始建的水利工程，堰坝横拦松阴溪，江边老街多画廊与写生点。', image: '' },
         { name: '浙江省丽水市龙泉市宝溪景区', level: '4A', intro: '龙泉宝溪乡的山村，溪水穿村，龙窑群沿坡而建，青瓷作坊可看拉坯与烧制，村中有国际竹建筑作品。', image: '' },
@@ -17476,6 +17497,7 @@ var _hmt = _hmt || [];
     '浙江省台州市椒江区台州海洋世界': '台州',
     '浙江省台州市临海市灵湖景区': '台州',
     '长屿硐天旅游区': '台州',
+    '台州温岭方山景区': '台州 · 温岭市 · 大溪镇',
     '浙江省丽水市松阳县松阳双童山景区': '丽水',
     '浙江省丽水市莲都区古堰画乡景区': '丽水',
     '浙江省丽水市龙泉市宝溪景区': '丽水',
@@ -22305,6 +22327,7 @@ var _hmt = _hmt || [];
     '嘉兴乌镇': '乌镇位于嘉兴桐乡，京杭大运河依镇而过，拥有六千多年历史，是典型的江南水乡古镇，十字形水系将镇区分为东南西北四栅。东栅保留原生态生活气息，茅盾故居、木心故居纪念馆、江南百床馆、蓝印花布坊值得细访；西栅经过整体保护性开发，河道宽阔，夜景灯影桨声尤为迷人，昭明书院、白莲塔等散布其间，乌镇戏剧节与世界互联网大会也在此举办。建议安排一到两天，白天游东栅感受市井，傍晚入西栅看夜景并住宿一晚，清晨的水上集市与薄雾中的石桥最有韵味。',
     '舟山普陀山': '普陀山是舟山群岛中的小岛，与五台山、峨眉山、九华山并称中国佛教四大名山，为观音菩萨道场，素有海天佛国之称。岛上普济寺、法雨寺、慧济寺为三大主寺，普济寺规模最大、香火最盛；慧济寺踞佛顶山巅，可乘索道而上；南海观音铜像高三十三米，立于岗巅俯瞰大海，已成普陀山标志。岛上还有千步沙、百步沙海滨浴场与潮音洞、梵音洞等海蚀奇观，山海风光与梵音涛声相融。上岛需从朱家尖蜈蚣峙码头乘船，建议安排一整天顺时针朝拜三大寺，夏秋海天澄澈，但需留意台风预警。',
     '温州雁荡山': '雁荡山位于温州乐清，因山顶有湖、芦苇丛生、秋雁宿之而得名，形成于一亿多年前的火山喷发，流纹岩峰林嶂洞姿态万千，史称东南第一山。景区以灵峰、灵岩、大龙湫为核心，合称雁荡三绝：灵峰夜景移步换形，全凭想象；灵岩飞渡表演惊险，表演者于悬崖间凌空而渡；大龙湫瀑布落差近二百米，如白练悬空。此外还有三折瀑、显胜门、方洞等景区。各景点分散，建议安排两天，住响岭头镇上，首日下午游灵岩看飞渡、夜观灵峰，次日访大龙湫与方洞，雨后瀑布最为壮观。',
+    '台州温岭方山景区': '【档案信息】台州温岭方山景区位于浙江省台州市温岭市大溪镇，官方登记地址为温岭市大溪镇滥田湖塘头岗村，2014年12月31日首次评定为国家4A级旅游景区。方山所在区域兼具世界地质公园、国家级风景名胜区等身份，自然景观与地方文脉并重。【范围口径】官方公布的方山—南嵩岩风景名胜区整体面积为9.88平方公里，位于大溪镇，是台州与温州的界山；常见导览资料另载方山核心景区约3.6平方公里、最高海拔约461米，属于核心游览区的辅助参考口径，不能与整个方山—南嵩岩景区的9.88平方公里混用。【名称与地理】方山为北雁荡山余脉，西南接雁荡，东北连温黄平原。古时因绝巘壁立如城而名方城山，唐代改称王城山，俗呼方岩，又称方山；其山顶平直如砥、山体方正如盒，也是方山得名的形象写照。【地质与地貌】方山以侏罗纪火山口地貌为基础，是典型的复活破火山口构造，山体由流纹质火山岩平台地貌和沟谷溪瀑两部分组成。四周被约50—100米高的绝壁围限，顶部形成千亩高山平台。山麓多幽谷、异洞、清泉与林木，山顶则湖潭密布、虬松凝翠，故有“空中花园”“琼台仙境”之誉；天气晴好时可俯瞰温黄平原，雨后常见云雾沿崖谷流动。【核心游赏】方岩书院位于梅雨瀑与峭斗洞之间，占地约1700平方米，采用明代书院布局，设报告厅、陈列室、纪念馆、研学教室和茶室。其文脉可追溯至谢氏家族兴办的会缌庵，明成化二十三年至弘治二年，即1487—1489年扩建为方岩书院，并因谢铎讲学而闻名；今见书院为后世重建，兼具地方先贤展示、廉政教育、社科普及与地质研学功能，研学教室陈列矿石、植物标本并设火山喷发体验内容。梅雨瀑在方山西麓峭斗嶂一带，飞泉受风散作蒙蒙细雨，因而得名；周边经改造设有亲瀑栈道、水景和地质科普长廊，峭斗洞位于嶂腰。山顶的方山天河包括上天湖、下天湖，鹊桥横跨天河峡谷，日月同辉亭位于平台东北，可东望滨海丘陵与平原。公开导览资料所列节点还有团萁岩、文笔峰、渡仙桥、方山松、和平塔、仙天门、天恩塔等，可结合现场导览图选择路线。【方山三绝】云海佛光、日月同升、瀑布倒流并称“方山三绝”。三者都依赖特定天气、风向、光线和季节条件，并非每日可见；其中日月同辉亭是导览资料中常用的东向观景点，摄影爱好者可在确认开放时间和天气后前往。【南嵩岩联动】方山—南嵩岩风景名胜区还包括南嵩岩片区。南嵩岩以火山岩劈理地貌、陡崖深谷、溪潭飞瀑见长，代表景观有龙勥门及沿途溪瀑，登高可览田园与回龙桥水库。南嵩岩讲寺建于宋景德年间，旧有“六月六晒经”法会。南嵩岩与方山核心游览区的开放、售票及连游方式可能分别安排，应以当日现场公告为准。【历史人文】方山宗教历史悠久，地方信仰供奉北宋杨家将，道教称“杨府大神”。方山之麓人才辈出，南宋工部侍郎、龙图阁直学士王居安，明代礼部右侍郎兼国子监祭酒谢铎，明代南京兵部尚书赵大佑并称“大溪三贤”。谢铎字鸣治，号方山、方石，是茶陵诗派重要代表诗人，其讲学与方岩书院共同构成景区重要的人文线索。明代旅行家徐霞客三游雁荡，游记中两次写到路经方山附近的盘山岭。【游赏建议】可先游梅雨瀑、方岩书院与峭斗洞，再登山串联天湖、鹊桥和观景亭；若连同南嵩岩游览，宜另留充足时间。一般可安排半天至一天，穿防滑步行鞋，雨后注意石阶湿滑，雷雨、大风天气避免登临绝壁、吊桥等暴露路段，不翻越护栏。云海、日出和佛光受天气影响较大，不宜将其视为固定项目。【实用信息】温岭市文广旅体局2023年公布的开放时间为06:00—17:00，联系电话0576-86330238。门票、惠民活动、季节性开放安排及景点检修信息可能调整，出行前宜通过景区最新公告或电话再次确认。',
     '杭州千岛湖': '千岛湖位于杭州淳安，是一九五九年新安江水电站建成蓄水后形成的人工湖，湖中大小岛屿一千零七十八个，故名千岛湖，水质极佳，有天下第一秀水之誉。湖区分中心湖区与东南湖区游览，梅峰岛登顶可俯瞰群岛星罗棋布的经典画面，月光岛、龙山岛各有主题；东南湖区的黄山尖以天下为公的天然岛屿排列奇观著称。环湖绿道骑行与皮划艇等户外项目近年颇受欢迎，千岛湖鱼头汤是必尝美味。建议安排一到两天，乘船游中心湖区，留半天骑行或自驾环湖，夏秋两季湖光山色最佳。',
     '嘉兴西塘古镇': '西塘位于嘉兴嘉善，地处江浙沪交界，春秋时为吴越相争之地，素有吴根越角之称。镇内九条河道交汇，百余座古桥与百余条弄堂纵横交错，两千多米的烟雨长廊沿河长卧，雨天不淋雨、晴天不晒日，是西塘独有的景致。送子来凤桥、环秀桥、石皮弄、西园等处古意浓厚，清晨薄雾中的廊棚与河埠头最能入画。古镇生活气息浓郁，居民仍枕河而居，芡实糕、熏青豆、黄酒值得品尝。建议安排半天至一天，下午抵达逛廊棚与弄堂，夜宿临河客栈赏灯影水色，次日清晨趁游客未至再静游一圈。',
     '杭州灵隐飞来峰': '灵隐寺创建于东晋咸和元年，相传印度高僧慧理至此，见一峰叹此乃中天竺灵鹫山之小岭，不知何代飞来，遂建寺名灵隐，峰名飞来。飞来峰海拔仅一百六十八米，却因遍布山崖的三百余尊造像而珍贵，造像年代跨越五代至宋元，其中南宋大肚弥勒像笑口常开，最为人熟知。灵隐寺为江南禅宗名刹，天王殿、大雄宝殿沿中轴层层升高，香火千年不绝，理公塔、冷泉亭点缀其间。景区位于西湖以西山林之中，环境清幽，建议清晨前往避开香客高峰，游寺后沿冷泉溪看造像，安排半天为宜。',
@@ -22528,6 +22551,7 @@ var _hmt = _hmt || [];
   };
 
 const SCENIC_PHOTOS = {
+    '台州温岭方山景区': ['https://p2.ssl.qhimgs1.com/t01e3e0e1d943ec9cec.jpg', 'https://p0.ssl.qhimgs1.com/t044680902011fec89e.jpg', 'https://p3.ssl.qhimgs1.com/t04574c90f3aa3b18b9.jpg', 'https://p0.ssl.qhimgs1.com/t048c043301873ddf8e.jpg', 'https://p2.ssl.qhimgs1.com/t04897d1b2ca7680fbc.jpg'],
     '南京钟山风景名胜区': ['https://p0.ssl.qhimgs1.com/t0491cd429dd44d7b2a.jpg', 'https://p1.ssl.qhimgs1.com/t010c72ccf1d7d5f7a1.jpg', 'https://p1.ssl.qhimgs1.com/t0412e8ceb839ef18d1.jpg', 'https://p5.ssl.qhimgs1.com/t04d0fd632c0f5c8ce5.jpg', 'https://p0.ssl.qhimgs1.com/t0454a8dac863e22464.jpg', 'https://p0.ssl.qhimgs1.com/t04fae91dc5b5be9106.jpg', 'https://p3.ssl.qhimgs1.com/t04d3ad899350a7a3e9.jpg', 'https://p5.ssl.qhimgs1.com/t044356aff1987907d5.jpg'],
     '苏州拙政园': ['https://p3.ssl.qhimgs1.com/t04cc2857492aeabe69.jpg', 'https://p1.ssl.qhimgs1.com/t04c2d107268a68d9eb.jpg', 'https://p3.ssl.qhimgs1.com/t01da5a0b816d6631c3.jpg', 'https://p2.ssl.qhimgs1.com/t010945b65615bd69fc.jpg', 'https://p3.ssl.qhimgs1.com/t0160ced07089b52cd9.jpg', 'https://n.sinaimg.cn/sinakd10112/709/w2000h1109/20210610/8c5e-krhvrxt4792942.jpg', 'https://img.pconline.com.cn/images/upload/upc/tx/photoblog/2009/30/c3/233338055_1601464168501_mthumb.jpg', 'https://n.sinaimg.cn/sinakd20108/298/w1618h1080/20201218/54df-kfnaptt6742967.jpg', 'https://p3.ssl.qhimgs1.com/t048cf0371161a296c9.jpg', 'https://p3.ssl.qhimgs1.com/t043db12fd3c4e3ee83.jpg', 'https://p0.ssl.qhimgs1.com/t04fc549cfd4c361c40.jpg'],
     '苏州周庄古镇': ['https://p2.ssl.qhimgs1.com/t015da55adfe71eeb38.jpg', 'https://p1.ssl.qhimgs1.com/t043953acdf9d4f5261.jpg', 'https://p0.ssl.qhimgs1.com/t01b8ecbffa4ea4731a.jpg', 'https://p0.ssl.qhimgs1.com/t0187a4b915f66ecfce.jpg', 'https://p2.ssl.qhimgs1.com/t01c05df60c7fb35b5c.jpg', 'https://res.klook.com/image/upload/v1742526619/admin-markdown/ceo9cciq5z9fq0bq7ngp.jpg', 'https://jsnews.jschina.com.cn/zq/focus/202009/W020200904530417865297.png', 'https://n.sinaimg.cn/sinakd20107/200/w1080h720/20201213/8ee8-kffctca6771254.jpg', 'https://p5.ssl.qhimgs1.com/t04eb62c6c352c8839f.jpg', 'https://p0.ssl.qhimgs1.com/t047f5ad59bbfcfd0a6.jpg', 'https://p3.ssl.qhimgs1.com/t0435e893201fdd7d89.jpg'],
@@ -28702,7 +28726,7 @@ const SCENIC_PHOTOS = {
     '浙江省宁波市象山县象山影视城景区': ['https://p3.ssl.qhimgs1.com/t0158029abb92ce907d.jpg', 'https://p5.ssl.qhimgs1.com/t01708d80e6cbfe1a5f.jpg', 'https://p5.ssl.qhimgs1.com/t0159e30be2f09a2e95.jpg', 'https://p2.ssl.qhimgs1.com/t04c8490c0f3f7e0958.jpg', 'https://p0.ssl.qhimgs1.com/t010ad4a80deb4158d4.jpg', 'https://p5.ssl.qhimgs1.com/t044c5dd643989db535.jpg', 'https://p3.ssl.qhimgs1.com/t04ac7e96eec05745bd.jpg', 'https://p1.ssl.qhimgs1.com/t0426130c15c3163d5b.jpg'],
     '天宫庄园景区': ['https://p0.ssl.qhimgs1.com/t01fe15a437a055285e.png', 'https://p0.ssl.qhimgs1.com/t018f58d94e16bcb4d4.jpg', 'https://p0.ssl.qhimgs1.com/t03f329a25fe9fb78aa.jpg', 'https://p3.ssl.qhimgs1.com/t04c9b4a937c5fe89b9.jpg', 'https://p3.ssl.qhimgs1.com/t012ed79eeeeacfbfb9.jpg', 'https://p1.ssl.qhimgs1.com/t04f4dc15d8d1415007.jpg', 'https://p5.ssl.qhimgs1.com/t04760a2dcff1cc55cf.jpg', 'https://p5.ssl.qhimgs1.com/t042a08ea8fc3302685.jpg'],
     '宁波博物馆景区': ['https://p0.ssl.qhimgs1.com/t017d325713902798ae.jpg', 'https://p5.ssl.qhimgs1.com/t010e9af744831209d5.jpg', 'https://p3.ssl.qhimgs1.com/t01a4fa97b7d704d85d.jpg', 'https://p0.ssl.qhimgs1.com/t017b16f4680a3224f4.jpg', 'https://p5.ssl.qhimgs1.com/t0198fe54f173709b5f.jpg', 'https://k.sinaimg.cn/n/sinakd20100/106/w1024h682/20230413/0676-ad67f06d3d74a2e5f261c1c05421dc07.jpg/w700d1q75cms.jpg', 'https://p5.ssl.qhimgs1.com/t042ed62197043012e5.jpg', 'https://p1.ssl.qhimgs1.com/t0453c9f04e528a1d51.jpg', 'https://p3.ssl.qhimgs1.com/t04ad427bc527d0a659.jpg', 'https://k.sinaimg.cn/n/sinakd20100/106/w1024h682/20230413/0676-ad67f06d3d74a2e5f261c1c05421dc07.jpg/w700d1q75cms.jpg'],
-    '石浦渔港古城景区': ['https://p3.ssl.qhimgs1.com/t04a42abd4e47643bf9.jpg', 'https://p5.ssl.qhimgs1.com/t048e11a9f6eb9f036f.jpg', 'https://p0.ssl.qhimgs1.com/t04379e67682bed016a.jpg', 'https://p0.ssl.qhimgs1.com/t04f1578857595dff1a.jpg', 'https://p3.ssl.qhimgs1.com/t04967b4bee94bc9bb3.jpg', 'https://p1.ssl.qhimg.com/t01d54b0c913831bdab.jpg', 'https://p0.ssl.qhimgs1.com/t0135a1352fee972d00.jpg', 'https://p5.ssl.qhimgs1.com/t01e19184096e1834bf.jpg', 'https://p2.ssl.qhimgs1.com/t04800a185ca8ad266c.jpg'],
+    '石浦渔港古城景区': ['https://p5.ssl.qhimgs1.com/t048e11a9f6eb9f036f.jpg', 'https://p0.ssl.qhimgs1.com/t04379e67682bed016a.jpg', 'https://p0.ssl.qhimgs1.com/t04f1578857595dff1a.jpg', 'https://p3.ssl.qhimgs1.com/t04967b4bee94bc9bb3.jpg', 'https://p1.ssl.qhimg.com/t01d54b0c913831bdab.jpg', 'https://p0.ssl.qhimgs1.com/t0135a1352fee972d00.jpg', 'https://p5.ssl.qhimgs1.com/t01e19184096e1834bf.jpg', 'https://p2.ssl.qhimgs1.com/t04800a185ca8ad266c.jpg', 'photos/0f931feb2740be10.png'],
     '浙江省宁波市慈溪市龙山镇达蓬山旅游度假区': ['https://p2.ssl.qhimgs1.com/t044dc1e150804b82bc.jpg', 'https://p0.ssl.qhimgs1.com/t01a23872b83775367a.jpg', 'https://p5.ssl.qhimgs1.com/t01ad2e5fc5f169cae5.jpg', 'https://p0.ssl.qhimgs1.com/t0467d43132b3bfcfc6.jpg', 'https://p1.ssl.qhimgs1.com/t01b0c0edf4c79baec7.jpg', 'https://p3.ssl.qhimgs1.com/t04caf4d292230f31a3.jpg', 'https://p1.ssl.qhimgs1.com/t044c44e3bbab03a517.jpg', 'https://p3.ssl.qhimgs1.com/t04128053029c144613.jpg'],
     '浙江省宁波市江北区绿野山居景区': ['https://p0.ssl.qhimgs1.com/t047be42ef4f911098e.jpg', 'https://p0.ssl.qhimgs1.com/t01a147d4e5a446013a.jpg', 'https://p5.ssl.qhimgs1.com/t0438c973db6a628e05.jpg', 'https://p2.ssl.qhimgs1.com/t0194732e80dfcd1cdc.jpg', 'https://p1.ssl.qhimgs1.com/t01aa519327b4eabfab.jpg'],
     '浙江省温州市瓯海区三垟湿地景区': ['https://p0.ssl.qhimgs1.com/t017efc01e3d619962e.jpg', 'https://p1.ssl.qhimgs1.com/t014a8226c1271565b7.jpg', 'https://p0.ssl.qhimgs1.com/t01071f99e13b128efa.jpg', 'https://p3.ssl.qhimgs1.com/t01dac38e9e8564496d.jpg', 'https://p0.ssl.qhimgs1.com/t010710e31d3eb84ee6.jpg'],
