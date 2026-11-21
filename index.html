@@ -22649,15 +22649,21 @@ window.__loadScenicIntros = (function () {
     '新疆': 650000, '台湾': 710000, '香港': 810000, '澳门': 820000
   };
 
-  const ECHARTS_CDNS = [
+  // GitHub Pages 在国内访问较慢，线上优先用公共 CDN，本地服务仍优先用同目录资源。
+  const IS_GITHUB_PAGES = /\.github\.io$/i.test(location.hostname);
+  const ECHARTS_CDNS = IS_GITHUB_PAGES ? [
+    'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js',
+    'vendor/echarts.min.js',
+    'https://unpkg.com/echarts@5.5.1/dist/echarts.min.js'
+  ] : [
     'vendor/echarts.min.js',
     'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js',
     'https://unpkg.com/echarts@5.5.1/dist/echarts.min.js'
   ];
   const GEOJSON_URL = 'geo/100000_full.json';
   const GEOJSON_FALLBACK_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
-  const PROVINCE_GEO_URL = 'geo/';
-  const PROVINCE_GEO_FALLBACK_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/';
+  const PROVINCE_GEO_URL = IS_GITHUB_PAGES ? 'https://geo.datav.aliyun.com/areas_v3/bound/' : 'geo/';
+  const PROVINCE_GEO_FALLBACK_URL = IS_GITHUB_PAGES ? 'geo/' : 'https://geo.datav.aliyun.com/areas_v3/bound/';
 
   const UI = {};
   let chart = null;
