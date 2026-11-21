@@ -1362,7 +1362,6 @@
     <div class="header-side">
       <p class="update-note">2026年11月15日更新 · 新增景区信息 <b>1022</b> 条 · 补充全国智能模糊检索</p>
       <a class="admin-entry" id="adminEntry" href="admin.html" hidden>后台管理</a>
-      <a class="admin-entry" id="lanEntry" href="http://192.168.0.105:8080/" hidden>局域网加速</a>
       <div class="header-row">
         <div class="legend" aria-label="景区等级说明">
           <span><i class="dot dot-5a"></i>5A 景区</span>
@@ -1379,10 +1378,6 @@
     // 后台管理入口仅在本地运行时显示，线上版本不暴露。
     if (['localhost', '127.0.0.1', '::1'].indexOf(location.hostname) >= 0) {
       document.getElementById('adminEntry').hidden = false;
-    }
-    // 线上版本提供一个切换到局域网旧电脑服务器的入口（仅同一局域网内可用）。
-    if (/(^|\.)github\.io$/i.test(location.hostname)) {
-      document.getElementById('lanEntry').hidden = false;
     }
   </script>
 
