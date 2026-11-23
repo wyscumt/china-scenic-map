@@ -24813,20 +24813,39 @@ var _hmt = _hmt || [];
     '金佛山': '重庆金佛山国家级自然保护区'
   };
 
-// 图片数据外置到 data/photos.js，首次需要展示景区列表时才加载，避免首屏下载约 3.7MB。
+// 图片数据外置：点击省份时只加载该省的 data/photos/<省>.js（几十~几百KB），
+// 全国检索或分省文件缺失时才加载完整的 data/photos.js，避免一次下载约 3.9MB。
 window.SCENIC_PHOTOS = window.SCENIC_PHOTOS || {};
 window.__loadScenicPhotos = (function () {
-  var started = false;
-  return function () {
-    if (started) return;
-    started = true;
+  var fullStarted = false;
+  var provinceStarted = {};
+  function inject(src, onload, onerror) {
     var script = document.createElement('script');
-    script.src = 'data/photos.js';
+    script.src = src;
     script.async = true;
-    script.onload = function () {
-      try { window.dispatchEvent(new Event('scenic-photos-ready')); } catch (error) {}
-    };
+    script.onload = onload;
+    script.onerror = onerror;
     document.head.appendChild(script);
+  }
+  function ready() {
+    try { window.dispatchEvent(new Event('scenic-photos-ready')); } catch (error) {}
+  }
+  function loadFull() {
+    if (fullStarted) return;
+    fullStarted = true;
+    inject('data/photos.js', ready, null);
+  }
+  return function (province) {
+    if (fullStarted) return;
+    if (!province) { loadFull(); return; }
+    if (provinceStarted[province]) return;
+    provinceStarted[province] = true;
+    // 该省未覆盖到的别名图片，随分省文件一起补齐（只加载一次）。
+    inject('data/photos/' + encodeURIComponent(province) + '.js', function () {
+      if (provinceStarted._other) { ready(); return; }
+      provinceStarted._other = true;
+      inject('data/photos/_other.js', ready, ready);
+    }, loadFull);
   };
 })();
 
@@ -25943,7 +25962,7 @@ window.__loadScenicIntros = (function () {
     searchTerm = '';
     selectedCity = '';
     UI.quickProvince.value = shortName;
-    if (window.__loadScenicPhotos) window.__loadScenicPhotos();
+    if (window.__loadScenicPhotos) window.__loadScenicPhotos(shortName);
     if (window.__loadScenicIntros) window.__loadScenicIntros();
     renderProvince(shortName);
     highlightProvince(shortName);
@@ -26053,18 +26072,39 @@ window.__loadScenicIntros = (function () {
       return;
     }
 
+    preconnectCardOrigins(filtered.slice(0, 4));
     const fragment = document.createDocumentFragment();
-    filtered.forEach(function (item) {
-      fragment.appendChild(buildCard(item));
+    filtered.forEach(function (item, index) {
+      fragment.appendChild(buildCard(item, undefined, index));
     });
     cardsWrap.appendChild(fragment);
     setupIntroClamps(cardsWrap);
   }
 
-  function buildCard(item, provinceName) {
+  // 提前与前几张照片的图源建立连接，减少首屏图片的握手等待。
+  var preconnectedOrigins = {};
+  function preconnectCardOrigins(items) {
+    items.forEach(function (item) {
+      var gallery = getGallery(item.name);
+      if (!gallery.length) return;
+      var match = /^https?:\/\/[^/]+/.exec(gallery[0]);
+      if (!match) return;
+      var origin = match[0];
+      if (preconnectedOrigins[origin]) return;
+      preconnectedOrigins[origin] = true;
+      var link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = origin;
+      document.head.appendChild(link);
+    });
+  }
+
+  function buildCard(item, provinceName, cardIndex) {
     const placeholder = makePlaceholderImage(item.name);
     const gallery = getGallery(item.name);
     const hasPhotos = gallery.length > 0;
+    // 前 4 张卡片的照片立即加载并提高优先级，其余保持懒加载。
+    const eager = typeof cardIndex === 'number' && cardIndex < 4;
     const card = document.createElement('article');
     card.className = 'scenic-card';
     card.setAttribute('data-name', item.name);
@@ -26079,7 +26119,8 @@ window.__loadScenicIntros = (function () {
       return '<div class="media-frame" data-index="' + index + '" title="点击放大照片">'
         + '<img src="' + src.replace(/"/g, '&quot;') + '"'
         + ' alt="' + escapeHtml(item.name) + (hasPhotos ? '实景配图' : '示意图') + '"'
-        + ' loading="lazy" decoding="async"'
+        + ' loading="' + (eager && index === 0 ? 'eager' : 'lazy') + '" decoding="async"'
+        + (eager && index === 0 ? ' fetchpriority="high"' : '')
         + (hasPhotos ? ' referrerpolicy="no-referrer"' : '') + '>'
         + zoomHint
         + '</div>';
@@ -26592,8 +26633,8 @@ window.__loadScenicIntros = (function () {
         + '</div>';
     } else {
       const fragment = document.createDocumentFragment();
-      shown.forEach(function (hit) {
-        fragment.appendChild(buildCard(hit.item, hit.province));
+      shown.forEach(function (hit, index) {
+        fragment.appendChild(buildCard(hit.item, hit.province, index));
       });
       cardsWrap.appendChild(fragment);
       setupIntroClamps(cardsWrap);
